@@ -1,0 +1,51 @@
+import mysql.connector
+
+# Step 1: Establish Connection
+conn = mysql.connector.connect(
+    host="localhost",
+    user="root",      # Replace with your MySQL username
+    password="password",  # Replace with your MySQL password
+    database="school_db"  # Your database name
+)
+
+# Step 2: Create Cursor Object
+cursor = conn.cursor()
+
+# Step 3: Insert Data
+insert_query = "INSERT INTO students (name, age, grade) VALUES (%s, %s, %s)"
+data = [
+    ("Alice", 20, "A"),
+    ("Bob", 22, "B"),
+    ("Charlie", 21, "A")
+]
+
+cursor.executemany(insert_query, data)
+conn.commit()
+print("Data inserted successfully!")
+
+# Step 4: Fetch and Display Data
+cursor.execute("SELECT * FROM students")
+rows = cursor.fetchall()
+
+print("\nStudent Records:")
+for row in rows:
+    print(row)
+
+# Step 5: Update Data
+cursor.execute("UPDATE students SET grade = 'A+' WHERE name = 'Bob'")
+conn.commit()
+print("\nData updated successfully!")
+
+# Step 6: Delete Data
+cursor.execute("DELETE FROM students WHERE name = 'Alice'")
+conn.commit()
+print("\nData deleted successfully!")
+
+# Step 7: Display Updated Data
+cursor.execute("SELECT * FROM students")
+print("\nUpdated Student Records:")
+for row in cursor.fetchall():
+    print(row)
+
+# Step 8: Close Connection
+conn.close()
